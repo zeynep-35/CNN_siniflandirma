@@ -49,7 +49,27 @@ Model 2'den Model 3'e geçişte performansı artırmak için yapılan yapısal d
 ### Performansa Etki Analizi
 * **Model 1:** Hazır ağırlıklar sayesinde 7. epoch itibariyle %100 eğitim doğruluğuna ulaşmıştır.
 * **Model 2'den 3'e Geçiş:** Veri artırma (Augmentation) ve Batch Normalization sayesinde modelin "aşırı öğrenme" (overfitting) sorunu azaltılmış, daha kararlı bir kayıp (loss) düşüşü gözlemlenmiştir.
+# Adım 2.4: Hiperparametre Optimizasyonu ve Performans Tablosu
 
+Bu çalışmada, Model 2'deki düşük performansı ve aşırı öğrenme (overfitting) sorununu çözmek için sistematik deneyler yapılmıştır. Aşağıdaki tablo, Model 2'den Model 3'ün final haline kadar olan gelişim sürecini özetlemektedir.
+
+| Deney No | Batch Size | Filtre Sayısı | Dropout | Öğrenme Oranı | Veri Artırımı | Test Doğruluğu | Notlar |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **1** | 32 | 32-64-128 | Yok | 0.001 | Yok | **%50.00** | **Model 2 (Referans):** Model veriyi ezberledi (Overfitting). Test başarısı rastgele tahmin seviyesinde kaldı. |
+| **2** | 16 | 32-64-128 | 0.5 | 0.0003 | Hafif | **%71.88** | **Model 2 (İyileştirilmiş):** Dropout ve Batch Normalization eklendi. Başarı arttı ancak hala kararsızlık mevcuttu. |
+| **3** | 16 | 32-64-128 | 0.4 | 0.0005 | **Evet (Aktif)** | **%76.50** | **Model 3 (Ara Deneme):** `ImageDataGenerator` eklendi. Veri artırımı sayesinde model genelleme yapmaya başladı. |
+| **4** | **8** | **32-64-128-256** | **0.5** | **0.0001** | **Evet (Agresif)** | **%81.25** | **Model 3 (Nihai - Final):** Batch Size 8'e düşürüldü, model derinleştirildi (256 filtre). **En iyi denge yakalandı ve %80 barajı aşıldı.** |
+
+### **Sonuçların Analizi ve Yorumlar**
+
+1.  **Neden Model 3 Daha İyi Sonuç Verdi?**
+    * Model 2, sınırlı veri setini "ezberlemeye" çalışırken, Model 3'te uyguladığımız **Agresif Veri Artırımı (Data Augmentation)** (döndürme, kaydırma) modele sürekli "farklı varyasyonlar" sunarak ezberlemeyi engellemiştir.
+
+2.  **Batch Size'ın Etkisi (32 -> 8):**
+    * Veri setimiz küçük olduğu için, Batch Size'ı **8**'e düşürmek modelin ağırlıklarını daha sık güncellemesini sağlamış, bu da eğitimin daha detaylı ve hassas gerçekleşmesine olanak tanımıştır.
+
+3.  **Model Derinliği (Filtre Artışı):**
+    * Filtre sayısının **256**'ya çıkarılması ve yeni bir evrişim katmanı eklenmesi, modelin "köşeli" ve "yuvarlak" nesneler arasındaki daha karmaşık geometrik farkları (kenar keskinliği, kavis derecesi vb.) ayırt etme kapasitesini artırmıştır.
 ## 🚀 Çalıştırma Adımları
 
 1. Veri setinizi Google Drive'a `makine_ogrenmesi_odev_1` klasörü altına yükleyin.
