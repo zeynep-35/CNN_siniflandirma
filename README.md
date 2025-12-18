@@ -18,8 +18,6 @@ Projenin çalıştırılması için aşağıdaki kütüphanelerin yüklü olmas�
 * **Matplotlib:** Sonuçların görselleştirilmesi.
 * **NumPy:** Matris işlemleri.
 * **OS:** Dosya dizin yönetimi.
-
-```bash
 ## 🏗️ Model Mimarileri
 
 ### 1. Model 1: VGG16 (Transfer Learning)
@@ -58,3 +56,4 @@ Model 2'den Model 3'e geçişte performansı artırmak için yapılan yapısal d
 2. `ImageDataGenerator` ile verileri normalize edin (1/255).
 3. İlgili model bloğunu çalıştırarak eğitimi başlatın.
 4. `plt.plot` komutları ile eğitim/doğrulama grafiklerini inceleyin.
+```bash
